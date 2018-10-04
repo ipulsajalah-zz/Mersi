@@ -1,0 +1,8 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.master" AutoEventWireup="true" CodeBehind="ReportGWIS.aspx.cs" Inherits="Ebiz.WebForm.custom.GWIS.ReportGWIS" %>
+<%@ Register assembly="DevExpress.XtraReports.v14.2.Web, Version=14.2.13.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.XtraReports.Web" tagprefix="dx" %>
+<asp:Content ID="Content3" ContentPlaceHolderID="PageTitle" runat="server"> Irregular Alteration
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <dx:ASPxDocumentViewer ID="ASPxDocumentViewer1" SettingsReportViewer-PrintUsingAdobePlugIn="false" runat="server" ReportTypeName="Ebiz.WebForm.Reports.GWISReport">
+    </dx:ASPxDocumentViewer>
+</asp:Content>

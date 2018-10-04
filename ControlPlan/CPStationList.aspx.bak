@@ -1,0 +1,180 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.master" AutoEventWireup="true" CodeBehind="CPStationList.aspx.cs" Inherits="Ebiz.WebForm.Tids.CV.ControlPlans.CPStationList" %>
+
+<%@ Register Assembly="DevExpress.Web.v14.2, Version=14.2.13.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Data.Linq" TagPrefix="dx" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="PageTitle" runat="server">
+    Control Plan List Of Stations
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="container-fluid" style="width: 100%; padding: 0 0 20px 0 !important;">
+        <div style="text-align: center; font-weight: bolder">
+            <span style="font-size: 18px;">STATION LIST<br />
+                <dx:ASPxLabel Style="font-weight: bolder; font-size: large;" CssClass="h2" runat="server" ID="lblStationName" />
+            </span>
+            <span style="font-size: 16px;">
+                <strong>
+                    <br />
+                    PM:&nbsp;<dx:ASPxLabel runat="server" ID="lblPackingMonth" Style="font-size: 16px; font-weight: 700" />
+                    &nbsp;&nbsp;&nbsp; Model:&nbsp;<dx:ASPxLabel runat="server" ID="lblModel" Style="font-weight: 700; font-size: 16px" />
+                </strong>
+            </span>
+        </div>
+    </div>
+
+    <dx:ASPxHiddenField ID="hfDocControl" runat="server" ClientInstanceName="hfDocControl">
+    </dx:ASPxHiddenField>
+
+    <dx:ASPxPopupControl ID="popupIA" runat="server" AllowDragging="True" CloseAction="CloseButton" HeaderText="Irregular Alteration" MinHeight="400px"
+        Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" MinWidth="1000px">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <div style="overflow: auto">
+                    <dx:ASPxGridView ID="grvIA" runat="server" AutoGenerateColumns="False" OnCustomUnboundColumnData="grvIA_OnCustomUnboundColumnData" Width="100%"
+                        OnHtmlRowPrepared="grvIA_OnHtmlRowPrepared">
+                        <Columns>
+                            <dx:GridViewDataTextColumn FieldName="No" VisibleIndex="0" UnboundType="String" Width="40">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="Info" FieldName="Info" ShowInCustomizationForm="True" VisibleIndex="1" Width="135">
+                                <DataItemTemplate>
+                                        <dx:ASPxButton ID="btnIAInfo" runat="server" RenderMode="Link" CommandArgument='<%#Eval("Id") %>' OnClick="btnIAInfo_OnClick">
+                                        </dx:ASPxButton>
+                                </DataItemTemplate>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="Description" FieldName="Description" ShowInCustomizationForm="True" VisibleIndex="2" Width="300">
+                                <PropertiesTextEdit EncodeHtml="False">
+                                </PropertiesTextEdit>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="Station" FieldName="StationName" ShowInCustomizationForm="True" VisibleIndex="3" Width="100">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="Model" ShowInCustomizationForm="True" VisibleIndex="4" Width="60">
+                                <DataItemTemplate>
+                                    <dx:ASPxLabel runat="server" ID="lblModelName" />
+                                </DataItemTemplate>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="Part Number" ShowInCustomizationForm="True" VisibleIndex="6">
+                                <DataItemTemplate>
+                                    <div style="word-wrap: break-word">
+                                        <dx:ASPxLabel runat="server" ID="lblPart" Width="85px" />
+                                    </div>
+                                </DataItemTemplate>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="Valid From" FieldName="ValidFrom" ShowInCustomizationForm="True" VisibleIndex="9" Width="100">
+                                <PropertiesTextEdit DisplayFormatString="MM/dd/yyyy">
+                                </PropertiesTextEdit>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="Valid To" FieldName="ValidTo" ShowInCustomizationForm="True" VisibleIndex="10" Width="100">
+                                <PropertiesTextEdit DisplayFormatString="MM/dd/yyyy">
+                                </PropertiesTextEdit>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn Caption="Id" FieldName="Id" ShowInCustomizationForm="True" VisibleIndex="5" Visible="False">
+                            </dx:GridViewDataTextColumn>
+                        </Columns>
+                        <SettingsPager>
+                            <PageSizeItemSettings Visible="True">
+                            </PageSizeItemSettings>
+                        </SettingsPager>
+                        <Settings ShowGroupPanel="True" VerticalScrollableHeight="350" VerticalScrollBarMode="Visible" />
+                        <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False" />
+                        <SettingsSearchPanel Visible="True" />
+                    </dx:ASPxGridView>
+                </div>
+                <dx:LinqServerModeDataSource ID="linqIA" runat="server" />
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
+    <dx:ASPxPopupControl ID="popupDocControl" runat="server" CloseAction="CloseButton" HeaderText="Document Control" MinHeight="500px"
+        MinWidth="1000px" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <dx:ASPxHiddenField ID="hfDocCtrlDetail" runat="server">
+                </dx:ASPxHiddenField>
+                <div style="overflow: auto; width: 100%">
+                    <dx:LinqServerModeDataSource ID="linqDocControl" runat="server" />
+                    <dx:ASPxGridView ID="grvDocControlDetail" runat="server" Width="100%" AutoGenerateColumns="False"
+                        OnHtmlRowPrepared="grvDocControlDetail_OnHtmlRowPrepared">
+                        <Columns>
+                            <dx:GridViewDataTextColumn FieldName="Id" ShowInCustomizationForm="True" Visible="False" VisibleIndex="0">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="DocTypeId" ShowInCustomizationForm="True" Visible="False" VisibleIndex="1">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="ProcessNo" ShowInCustomizationForm="True" VisibleIndex="2">
+                                <DataItemTemplate>
+                                    <dx:ASPxButton ID="btnProcessNo" runat="server" RenderMode="Link" Text='<%# Eval("ProcessNo") %>'
+                                        CommandArgument='<%#Eval("Id") %>' OnClick="btnProcessNo_OnClick">
+                                    </dx:ASPxButton>
+                                </DataItemTemplate>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="Title" ShowInCustomizationForm="True" VisibleIndex="3">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="File" ShowInCustomizationForm="True" VisibleIndex="4">
+                                <DataItemTemplate>
+                                    <dx:ASPxButton ID="btnDownload" runat="server" RenderMode="Link" CommandArgument='<%#Eval("Id")%>'
+                                        OnClick="btnDownload_OnClick">
+                                    </dx:ASPxButton>
+                                </DataItemTemplate>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="ValidFrom" ShowInCustomizationForm="True" VisibleIndex="5">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="ValidTo" ShowInCustomizationForm="True" VisibleIndex="6">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="CreatedBy" ShowInCustomizationForm="True" VisibleIndex="7">
+                            </dx:GridViewDataTextColumn>
+                        </Columns>
+                        <SettingsPager>
+                            <PageSizeItemSettings Visible="True">
+                            </PageSizeItemSettings>
+                        </SettingsPager>
+                        <Settings ShowGroupPanel="True" />
+                        <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False" />
+                        <SettingsSearchPanel Visible="True" />
+                    </dx:ASPxGridView>
+                </div>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
+    <dx:ASPxPopupControl ID="popupTools" runat="server" CloseAction="CloseButton" HeaderText="Tools" MinHeight="500px" MinWidth="800px" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter">
+        <ContentCollection>
+            <dx:PopupControlContentControl runat="server">
+                <dx:ASPxHiddenField ID="hfTools" runat="server">
+                </dx:ASPxHiddenField>
+                <div style="overflow: auto; width: 100%">
+                    <dx:LinqServerModeDataSource ID="linqTools" runat="server" />
+                    <dx:ASPxGridView ID="grvTools" runat="server" Width="100%" AutoGenerateColumns="False" OnPageIndexChanged="grvTools_PageIndexChanged">
+                        <Columns>
+                            <dx:GridViewDataTextColumn FieldName="Id" ShowInCustomizationForm="True" Visible="False" VisibleIndex="0">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="InventoryNumber" ShowInCustomizationForm="True" VisibleIndex="3" Visible="false">
+                                <%--<DataItemTemplate>
+                                    <dx:ASPxButton ID="btnProcessNo" runat="server" RenderMode="Link" Text='<%# Eval("ProcessNo") %>'
+                                        CommandArgument='<%#Eval("Id") %>' OnClick="btnProcessNo_OnClick">
+                                    </dx:ASPxButton>
+                                </DataItemTemplate>--%>
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="NM" ShowInCustomizationForm="True" VisibleIndex="4">
+                            </dx:GridViewDataTextColumn>
+                             <dx:GridViewDataTextColumn FieldName="Type" ShowInCustomizationForm="True" VisibleIndex="5">
+                            </dx:GridViewDataTextColumn>
+                             <dx:GridViewDataTextColumn FieldName="ClassName" ShowInCustomizationForm="True" VisibleIndex="6">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="Description" ShowInCustomizationForm="True" VisibleIndex="2">
+                            </dx:GridViewDataTextColumn>
+                            <dx:GridViewDataTextColumn FieldName="Number" ShowInCustomizationForm="True" VisibleIndex="1" Caption="Tool Number">
+                            </dx:GridViewDataTextColumn>
+                        </Columns>
+                                <SettingsPager>
+                            <PageSizeItemSettings Visible="False" ShowAllItem="true">
+                            </PageSizeItemSettings>
+                        </SettingsPager>
+                        <Settings ShowGroupPanel="False" />
+                        <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False" />
+                        <SettingsSearchPanel Visible="False" />
+                        <Settings VerticalScrollableHeight="500" VerticalScrollBarMode="Auto" />
+                    </dx:ASPxGridView>
+                </div>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
+
+</asp:Content>
